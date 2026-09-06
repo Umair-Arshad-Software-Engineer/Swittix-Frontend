@@ -20,6 +20,33 @@
   --text-secondary: #93a0b8;
   --text-muted: #5b677e;
   --error: #ef4444;
+
+  /* Responsive spacing tokens */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* Responsive font sizes */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
+
+  /* Container widths */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1432px;
 }
 
 * {
@@ -32,10 +59,140 @@ body,
   background: var(--bg);
   color: var(--text-primary);
   margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 body {
   font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   RESPONSIVE UTILITY CLASSES
+   ============================================================ */
+
+/* Container with responsive padding */
+.container-responsive {
+  width: 100%;
+  max-width: var(--container-2xl);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .container-responsive {
+    padding-left: var(--space-lg);
+    padding-right: var(--space-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-responsive {
+    padding-left: var(--space-2xl);
+    padding-right: var(--space-2xl);
+  }
+}
+
+/* Responsive text utilities */
+.text-hero {
+  font-size: var(--text-3xl);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 640px) {
+  .text-hero {
+    font-size: var(--text-5xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .text-hero {
+    font-size: var(--text-6xl);
+  }
+}
+
+.text-section-title {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+@media (min-width: 640px) {
+  .text-section-title {
+    font-size: var(--text-4xl);
+  }
+}
+
+.text-section-sub {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+@media (min-width: 640px) {
+  .text-section-sub {
+    font-size: var(--text-base);
+  }
+}
+
+/* Responsive grid */
+.grid-responsive {
+  display: grid;
+  gap: var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .grid-responsive {
+    gap: var(--space-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-responsive {
+    gap: var(--space-xl);
+  }
+}
+
+/* Card padding responsive */
+.card-padding {
+  padding: var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .card-padding {
+    padding: var(--space-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-padding {
+    padding: var(--space-xl);
+  }
+}
+
+/* Touch-friendly tap targets */
+.tap-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Responsive spacing */
+.section-spacing {
+  padding-top: var(--space-xl);
+  padding-bottom: var(--space-xl);
+}
+
+@media (min-width: 640px) {
+  .section-spacing {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+  }
 }
 
 /* ============================================================
@@ -195,7 +352,51 @@ body {
   opacity: 0.35;
 }
 
+/* ============================================================
+   RESPONSIVE ANIMATION OPTIMIZATIONS
+   ============================================================ */
+
+/* Reduce animation intensity on mobile for better performance */
+@media (max-width: 640px) {
+  .animate-float-bob {
+    animation-duration: 4s !important;
+    animation-timing-function: ease-in-out !important;
+  }
+
+  .animate-glow-pulse {
+    animation-duration: 5s !important;
+  }
+
+  .animate-icon-wobble {
+    animation-duration: 8s !important;
+  }
+
+  .animate-spin-slow {
+    animation-duration: 14s !important;
+  }
+
+  .animate-marquee {
+    animation-duration: 40s !important;
+  }
+
+  .animate-pulse-dot {
+    animation-duration: 2s !important;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION PREFERENCE
+   ============================================================ */
+
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
   .animate-shimmer,
   .animate-ripple,
   .cursor-blink,
@@ -209,3 +410,78 @@ body {
     animation: none !important;
   }
 }
+
+/* ============================================================
+   SAFE AREA SUPPORT (Notched phones)
+   ============================================================ */
+
+@supports (padding: max(0px)) {
+  .safe-bottom {
+    padding-bottom: max(var(--space-md), env(safe-area-inset-bottom));
+  }
+
+  .safe-top {
+    padding-top: max(var(--space-md), env(safe-area-inset-top));
+  }
+
+  .safe-horizontal {
+    padding-left: max(var(--space-md), env(safe-area-inset-left));
+    padding-right: max(var(--space-md), env(safe-area-inset-right));
+  }
+}
+
+/* ============================================================
+   SCROLLBAR STYLING
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-light);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--bg);
+}
+
+/* ============================================================
+   SELECTION COLOR
+   ============================================================ */
+
+::selection {
+  background: var(--primary);
+  color: white;
+}
+
+/* ============================================================
+   FOCUS VISIBLE ACCESSIBILITY
+   ============================================================ */
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   RESPONSIVE BREAKPOINT HELPERS (for JS use)
+   ============================================================ */
+
+@custom-media --sm (min-width: 640px);
+@custom-media --md (min-width: 768px);
+@custom-media --lg (min-width: 1024px);
+@custom-media --xl (min-width: 1280px);
+@custom-media --2xl (min-width: 1536px);

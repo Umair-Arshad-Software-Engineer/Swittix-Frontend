@@ -1,9 +1,5 @@
 import { useRef, useState } from 'react';
 
-/**
- * Mirrors Dart's _AnimatedButton / _CtaButton: hover scale-up, idle shimmer
- * sweep on primary buttons, and a tap ripple that bursts from the click point.
- */
 export function AnimatedButton({ label, icon, primary = false, onClick, className = '' }) {
   const [hover, setHover] = useState(false);
   const [pressed, setPressed] = useState(false);
@@ -31,8 +27,8 @@ export function AnimatedButton({ label, icon, primary = false, onClick, classNam
       onMouseUp={() => setPressed(false)}
       onClick={onClick}
       className={[
-        'relative inline-flex items-center gap-2 overflow-hidden rounded-[10px]',
-        'px-5 py-3.5 text-sm font-bold transition-transform duration-150 ease-out',
+        'relative inline-flex items-center gap-1.5 sm:gap-2 overflow-hidden rounded-[10px]',
+        'px-3 sm:px-5 py-2.5 sm:py-3.5 text-xs sm:text-sm font-bold transition-transform duration-150 ease-out',
         pressed ? 'scale-[0.96]' : hover ? 'scale-[1.045]' : 'scale-100',
         primary
           ? 'text-white bg-gradient-to-br from-[#2F6FED] to-[#3B82F6]'
@@ -80,7 +76,6 @@ export function AnimatedButton({ label, icon, primary = false, onClick, classNam
   );
 }
 
-/** Solid nav "Let's Talk" pill — mirrors theme.dart's PrimaryButton. */
 export function PrimaryButton({ label, onClick }) {
   const [hover, setHover] = useState(false);
   return (
@@ -88,7 +83,7 @@ export function PrimaryButton({ label, onClick }) {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onClick={onClick}
-      className={`rounded-lg px-[22px] py-3 text-sm font-semibold text-white transition-transform duration-150 ${
+      className={`rounded-lg px-4 sm:px-[22px] py-2 sm:py-3 text-xs sm:text-sm font-semibold text-white transition-transform duration-150 ${
         hover ? 'scale-[1.02]' : ''
       }`}
       style={{
@@ -103,12 +98,11 @@ export function PrimaryButton({ label, onClick }) {
   );
 }
 
-// In AnimatedButton.jsx or create it:
 export function SecondaryButton({ label, onClick }) {
   return (
     <button
       onClick={onClick}
-      className="rounded-full border border-[#6FA0FF]/30 px-8 py-3.5 font-semibold text-[#F3F6FB] transition-all duration-300 hover:border-[#6FA0FF] hover:bg-[#6FA0FF]/10"
+      className="rounded-full border border-[#6FA0FF]/30 px-4 sm:px-8 py-2.5 sm:py-3.5 text-xs sm:text-sm font-semibold text-[#F3F6FB] transition-all duration-300 hover:border-[#6FA0FF] hover:bg-[#6FA0FF]/10"
     >
       {label}
     </button>

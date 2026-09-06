@@ -87,7 +87,7 @@ function CheckboxPill({ label, checked, onChange }) {
     <button
       type="button"
       onClick={onChange}
-      className="flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors"
+      className="flex items-center gap-1.5 sm:gap-2 rounded-full border px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors"
       style={{
         borderColor: checked ? '#3B82F6' : '#1A2233',
         backgroundColor: checked ? 'rgba(59,130,246,0.12)' : '#0A0E17',
@@ -95,14 +95,14 @@ function CheckboxPill({ label, checked, onChange }) {
       }}
     >
       <span
-        className="flex h-4 w-4 items-center justify-center rounded-[4px] border text-[10px]"
+        className="flex h-3.5 w-3.5 sm:h-4 sm:w-4 items-center justify-center rounded-[4px] border text-[8px] sm:text-[10px]"
         style={{
           borderColor: checked ? '#3B82F6' : '#5B677E',
           backgroundColor: checked ? '#3B82F6' : 'transparent',
         }}
       >
         {checked && (
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+          <svg width="8" height="8" sm:width="10" sm:height="10" viewBox="0 0 24 24" fill="none">
             <path d="M5 13l4 4L19 7" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         )}
@@ -151,7 +151,7 @@ export function StartProject({ onNavigate }) {
     return Object.keys(next).length === 0;
   };
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
@@ -172,18 +172,18 @@ const handleSubmit = async (e) => {
     form.files.forEach((file) => fd.append('files', file));
 
     try {
-        const res = await fetch('/api/project-requests', {
-            method: 'POST',
-            body: fd, // no Content-Type header — browser sets it with the correct multipart boundary
-        });
-        const result = await res.json();
+      const res = await fetch('/api/project-requests', {
+        method: 'POST',
+        body: fd,
+      });
+      const result = await res.json();
 
-        if (result.success) setSubmitted(true);
-        else setErrors(result.errors || {});
+      if (result.success) setSubmitted(true);
+      else setErrors(result.errors || {});
     } catch (err) {
-        setErrors({ description: 'Something went wrong. Please try again.' });
+      setErrors({ description: 'Something went wrong. Please try again.' });
     }
-};
+  };
 
   const handleFileChange = (e) => {
     setForm((f) => ({ ...f, files: Array.from(e.target.files || []) }));
@@ -191,21 +191,21 @@ const handleSubmit = async (e) => {
 
   if (submitted) {
     return (
-      <div className="mx-auto flex max-w-[720px] flex-col items-center px-5 py-24 text-center sm:px-10">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#2F6FED] to-[#3B82F6] shadow-[0_0_35px_2px_rgba(47,111,237,0.5)]">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+      <div className="mx-auto flex max-w-[720px] flex-col items-center px-4 sm:px-6 py-16 sm:py-24 text-center">
+        <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#2F6FED] to-[#3B82F6] shadow-[0_0_35px_2px_rgba(47,111,237,0.5)]">
+          <svg width="24" height="24" sm:width="30" sm:height="30" viewBox="0 0 24 24" fill="none">
             <path d="M5 13l4 4L19 7" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
-        <h1 className="mt-6 text-[28px] font-extrabold text-[#F3F6FB] sm:text-[34px]">
+        <h1 className="mt-5 sm:mt-6 text-2xl sm:text-[28px] font-extrabold text-[#F3F6FB]">
           Thanks, {form.fullName.split(' ')[0]}!
         </h1>
-        <p className="mt-3 max-w-md text-[15px] leading-relaxed text-[#93A0B8]">
+        <p className="mt-2 sm:mt-3 max-w-md text-sm sm:text-[15px] leading-relaxed text-[#93A0B8]">
           We've received your project requirements. Our team will review the details and get
           back to you at <span className="text-[#6FA0FF]">{form.email}</span> within 1-2 business
           days.
         </p>
-        <div className="mt-8 flex gap-3.5">
+        <div className="mt-6 sm:mt-8 flex flex-wrap gap-3 sm:gap-3.5">
           <AnimatedButton label="Back to Home" primary onClick={() => onNavigate('/')} />
           <AnimatedButton
             label="Submit Another"
@@ -220,10 +220,10 @@ const handleSubmit = async (e) => {
   }
 
   return (
-    <div className="relative mx-auto max-w-[860px] px-5 pb-20 pt-10 sm:px-10 sm:pt-14 lg:px-0">
+    <div className="relative mx-auto max-w-[860px] px-4 sm:px-6 lg:px-0 pb-16 sm:pb-20 pt-8 sm:pt-10 sm:pt-14">
       <button
         onClick={() => onNavigate('/')}
-        className="mb-6 flex items-center gap-1.5 text-sm font-medium text-[#93A0B8] transition-colors hover:text-[#F3F6FB]"
+        className="mb-4 sm:mb-6 flex items-center gap-1.5 text-sm font-medium text-[#93A0B8] transition-colors hover:text-[#F3F6FB]"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
           <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -231,26 +231,25 @@ const handleSubmit = async (e) => {
         Back to Home
       </button>
 
-      <div className="inline-flex items-center gap-2 rounded-full border border-[#2F6FED]/20 bg-[#2F6FED]/[0.08] px-[13px] py-2">
-        <span className="h-[7px] w-[7px] rounded-full bg-[#3B82F6]" />
-        <span className="text-[10.5px] font-bold tracking-wider text-[#93A0B8]">
+      <div className="inline-flex items-center gap-2 rounded-full border border-[#2F6FED]/20 bg-[#2F6FED]/[0.08] px-3 sm:px-[13px] py-1.5 sm:py-2">
+        <span className="h-1.5 w-1.5 sm:h-[7px] sm:w-[7px] rounded-full bg-[#3B82F6]" />
+        <span className="text-[9px] sm:text-[10.5px] font-bold tracking-wider text-[#93A0B8]">
           START A PROJECT
         </span>
       </div>
 
-      <h1 className="mt-5 text-[32px] font-extrabold leading-tight text-[#F3F6FB] sm:text-[42px]">
+      <h1 className="mt-4 sm:mt-5 text-2xl sm:text-[32px] sm:text-[42px] font-extrabold leading-tight text-[#F3F6FB]">
         Tell us about your <span className="text-[#6FA0FF]">software requirement</span>
       </h1>
-      <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[#93A0B8]">
+      <p className="mt-2 sm:mt-3 max-w-xl text-sm sm:text-[15px] leading-relaxed text-[#93A0B8]">
         Fill out the details below and our team will get back to you with a proposal and
         timeline tailored to your project.
       </p>
 
-      <form onSubmit={handleSubmit} className="mt-10 flex flex-col gap-9">
-        {/* Contact details */}
-        <section className="flex flex-col gap-5 rounded-2xl border border-[#1A2233] bg-[#05070C]/60 p-5 sm:p-7">
-          <h2 className="text-lg font-bold text-[#F3F6FB]">Contact Details</h2>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <form onSubmit={handleSubmit} className="mt-6 sm:mt-10 flex flex-col gap-6 sm:gap-9">
+        <section className="flex flex-col gap-4 sm:gap-5 rounded-2xl border border-[#1A2233] bg-[#05070C]/60 p-4 sm:p-5 sm:p-7">
+          <h2 className="text-base sm:text-lg font-bold text-[#F3F6FB]">Contact Details</h2>
+          <div className="grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2">
             <Field label="Full Name" required>
               <TextInput
                 type="text"
@@ -288,9 +287,8 @@ const handleSubmit = async (e) => {
           </div>
         </section>
 
-        {/* Project scope */}
-        <section className="flex flex-col gap-5 rounded-2xl border border-[#1A2233] bg-[#05070C]/60 p-5 sm:p-7">
-          <h2 className="text-lg font-bold text-[#F3F6FB]">Project Scope</h2>
+        <section className="flex flex-col gap-4 sm:gap-5 rounded-2xl border border-[#1A2233] bg-[#05070C]/60 p-4 sm:p-5 sm:p-7">
+          <h2 className="text-base sm:text-lg font-bold text-[#F3F6FB]">Project Scope</h2>
 
           <Field label="Project Type" required>
             <SelectInput
@@ -305,7 +303,7 @@ const handleSubmit = async (e) => {
           </Field>
 
           <Field label="Target Platforms" hint="Select all that apply">
-            <div className="flex flex-wrap gap-2.5">
+            <div className="flex flex-wrap gap-2 sm:gap-2.5">
               {PLATFORM_OPTIONS.map((p) => (
                 <CheckboxPill
                   key={p}
@@ -319,7 +317,7 @@ const handleSubmit = async (e) => {
             </div>
           </Field>
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2">
             <Field label="Estimated Budget">
               <SelectInput
                 options={BUDGET_RANGES}
@@ -339,7 +337,7 @@ const handleSubmit = async (e) => {
           </div>
 
           <Field label="Preferred Tech Stack" hint="Optional — select all that apply">
-            <div className="flex flex-wrap gap-2.5">
+            <div className="flex flex-wrap gap-2 sm:gap-2.5">
               {TECH_OPTIONS.map((t) => (
                 <CheckboxPill
                   key={t}
@@ -354,9 +352,8 @@ const handleSubmit = async (e) => {
           </Field>
         </section>
 
-        {/* Requirement details */}
-        <section className="flex flex-col gap-5 rounded-2xl border border-[#1A2233] bg-[#05070C]/60 p-5 sm:p-7">
-          <h2 className="text-lg font-bold text-[#F3F6FB]">Requirement Details</h2>
+        <section className="flex flex-col gap-4 sm:gap-5 rounded-2xl border border-[#1A2233] bg-[#05070C]/60 p-4 sm:p-5 sm:p-7">
+          <h2 className="text-base sm:text-lg font-bold text-[#F3F6FB]">Requirement Details</h2>
 
           <Field
             label="Describe your project"
@@ -364,7 +361,8 @@ const handleSubmit = async (e) => {
             hint="What are you building, and what problem does it solve?"
           >
             <TextArea
-              rows={5}
+              rows={4}
+              sm:rows={5}
               placeholder="E.g. We need a mobile POS app for our bakery with offline sales sync, receipt printing, and inventory tracking..."
               value={form.description}
               onChange={update('description')}
@@ -376,7 +374,8 @@ const handleSubmit = async (e) => {
 
           <Field label="Key goals / success criteria" hint="Optional">
             <TextArea
-              rows={3}
+              rows={2}
+              sm:rows={3}
               placeholder="E.g. Reduce manual billing errors, go live before Ramadan, support 5 branches..."
               value={form.goals}
               onChange={update('goals')}
@@ -410,9 +409,9 @@ const handleSubmit = async (e) => {
           >
             <label
               htmlFor="file-upload"
-              className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-[#1A2233] bg-[#0A0E17] px-4 py-8 text-center transition-colors hover:border-[#3B82F6]"
+              className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-[#1A2233] bg-[#0A0E17] px-4 py-6 sm:py-8 text-center transition-colors hover:border-[#3B82F6]"
             >
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+              <svg width="22" height="22" sm:width="26" sm:height="26" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M12 16V4M12 4l-4 4M12 4l4 4M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"
                   stroke="#6FA0FF"
@@ -421,7 +420,7 @@ const handleSubmit = async (e) => {
                   strokeLinejoin="round"
                 />
               </svg>
-              <span className="text-sm font-medium text-[#93A0B8]">
+              <span className="text-xs sm:text-sm font-medium text-[#93A0B8]">
                 Click to upload or drag files here
               </span>
               <input
@@ -464,8 +463,9 @@ const handleSubmit = async (e) => {
             label="Submit Requirement"
             primary
             type="submit"
+            className="w-full sm:w-auto justify-center"
             icon={
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+              <svg width="15" height="15" sm:width="17" sm:height="17" viewBox="0 0 24 24" fill="none">
                 <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             }

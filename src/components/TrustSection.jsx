@@ -1,10 +1,6 @@
-// Pulls in every file under src/assets/Companylogos at build time (Vite
-// resolves each to a hashed, optimized URL). `eager: true` means they're
-// all bundled upfront — fine for ~18 small logos used above the fold.
+// Pulls in every file under src/assets/Companylogos at build time
 const logoModules = import.meta.glob('../assets/Companylogos/*', { eager: true });
 
-// Map "aklogo" -> url, regardless of the actual file extension/case
-// (AKlogo.png, Familylogo.PNG, etc. all normalize the same way).
 const logoByKey = {};
 for (const path in logoModules) {
   const filename = path.split('/').pop();
@@ -12,8 +8,6 @@ for (const path in logoModules) {
   logoByKey[key] = logoModules[path].default;
 }
 
-// Display name + the filename (minus extension, lowercased) it maps to —
-// matches the asset list from the original Flutter TrustSection.
 const COMPANIES = [
   ['AL KARAM Hosiery', 'aklogo'],
   ['Al-Saeed Sweets & Bakers', 'alsaeedlogo'],
@@ -37,15 +31,15 @@ const COMPANIES = [
 
 function LogoTile({ name, logo }) {
   return (
-    <div className="flex h-[120px] w-[160px] flex-shrink-0 items-center justify-center rounded-xl border border-[#1A2233] bg-[#05070C]/40 p-3">
+    <div className="flex h-[80px] w-[120px] sm:h-[100px] sm:w-[140px] lg:h-[120px] lg:w-[160px] flex-shrink-0 items-center justify-center rounded-xl border border-[#1A2233] bg-[#05070C]/40 p-2 sm:p-3">
       {logo ? (
         <img
           src={logo}
           alt={name}
-          className="h-[100px] w-[140px] object-contain"
+          className="h-[60px] w-[100px] sm:h-[80px] sm:w-[120px] lg:h-[100px] lg:w-[140px] object-contain"
         />
       ) : (
-        <span className="text-xs font-bold uppercase tracking-wide text-[#5B677E]">
+        <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wide text-[#5B677E]">
           {name}
         </span>
       )}
@@ -53,23 +47,22 @@ function LogoTile({ name, logo }) {
   );
 }
 
-
 export function TrustSection() {
   const doubled = [...COMPANIES, ...COMPANIES];
 
   return (
-    <section className="border-y border-[#1A2233] bg-[#0A0E17] py-[26px]">
-      <div className="mx-auto max-w-[1240px] px-6 text-center">
-        <h2 className="text-xl font-extrabold tracking-tight text-[#F3F6FB] sm:text-[28px]">
+    <section className="border-y border-[#1A2233] bg-[#0A0E17] py-4 sm:py-[26px]">
+      <div className="mx-auto max-w-[1240px] px-4 sm:px-6 text-center">
+        <h2 className="text-lg sm:text-xl lg:text-[28px] font-extrabold tracking-tight text-[#F3F6FB]">
           Trusted by Industry Leaders
         </h2>
-        <p className="mt-1.5 text-[13px] text-[#5B677E] sm:text-[15px]">
+        <p className="mt-1 text-xs sm:text-[13px] lg:text-[15px] text-[#5B677E]">
           Companies that rely on us to build their digital future
         </p>
       </div>
 
-      <div className="relative mt-5 overflow-hidden">
-        <div className="flex w-max gap-6 animate-marquee">
+      <div className="relative mt-3 sm:mt-5 overflow-hidden">
+        <div className="flex w-max gap-3 sm:gap-4 lg:gap-6 animate-marquee">
           {doubled.map((c, i) => (
             <LogoTile key={`${c.name}-${i}`} name={c.name} logo={c.logo} />
           ))}

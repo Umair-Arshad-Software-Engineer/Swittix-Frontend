@@ -24,10 +24,8 @@ import { Solutions } from './components/Solutions';
 import { Portfolio } from './components/Portfolio';
 import { Contact } from './components/Contact';
 
-// Minimum time the loader stays up, so fast route swaps / fast connections
-// still register as an intentional loading beat rather than a flicker.
-const INITIAL_LOAD_MS = 1100;
-const ROUTE_LOAD_MS = 500;
+const INITIAL_LOAD_MS = 800;
+const ROUTE_LOAD_MS = 400;
 
 function HomePage({ onNavigate }) {
   return (
@@ -47,9 +45,7 @@ function AppShell() {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
 
-  // One-time loader on first paint of the whole app.
   const [initialLoading, setInitialLoading] = useState(true);
-  // Short loader on every subsequent in-app navigation.
   const [routeLoading, setRouteLoading] = useState(false);
   const isFirstRender = useRef(true);
 
@@ -59,8 +55,6 @@ function AppShell() {
   }, []);
 
   useEffect(() => {
-    // Skip firing a route loader on the very first mount — the initial
-    // loader already covers it.
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
@@ -77,7 +71,6 @@ function AppShell() {
 
   const showLoader = initialLoading || routeLoading;
 
-  // Admin pages get their own layout — no marketing NavBar/Footer/backgrounds.
   if (isAdminRoute) {
     return (
       <AdminErrorBoundary>
@@ -99,29 +92,33 @@ function AppShell() {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-[#05070C]">
-      <AnimatePresence>
-        {showLoader && <Loader key="loader" variant={initialLoading ? 'full' : 'route'} />}
-      </AnimatePresence>
+    // In App.jsx, add pt-[60px] sm:pt-20 to account for the fixed navbar
 
-      <NavBar currentRoute={location.pathname} onNavigate={handleNavigate} />
+    return (
+      <div className="min-h-screen bg-[#05070C] overflow-x-hidden">
+        <AnimatePresence>
+          {showLoader && <Loader key="loader" variant={initialLoading ? 'full' : 'route'} />}
+        </AnimatePresence>
 
-      <PageBackgrounds routeKey={location.pathname}>
-        <Routes>
-          <Route path="/" element={<HomePage onNavigate={handleNavigate} />} />
-          <Route path="/about" element={<About onNavigate={handleNavigate} />} />
-          <Route path="/services" element={<Services onNavigate={handleNavigate} />} />
-          <Route path="/solutions" element={<Solutions onNavigate={handleNavigate} />} />
-          <Route path="/products" element={<Products onNavigate={handleNavigate} />} />
-          <Route path="/portfolio" element={<Portfolio onNavigate={handleNavigate} />} />
-          <Route path="/contact" element={<Contact onNavigate={handleNavigate} />} />
-          <Route path="/start-project" element={<StartProject onNavigate={handleNavigate} />} />
-        </Routes>
-        <Footer onNavigate={handleNavigate} />
-      </PageBackgrounds>
-    </div>
-  );
+        <NavBar currentRoute={location.pathname} onNavigate={handleNavigate} />
+
+        <PageBackgrounds routeKey={location.pathname}>
+          <div className="pt-[60px] sm:pt-20">
+            <Routes>
+              <Route path="/" element={<HomePage onNavigate={handleNavigate} />} />
+              <Route path="/about" element={<About onNavigate={handleNavigate} />} />
+              <Route path="/services" element={<Services onNavigate={handleNavigate} />} />
+              <Route path="/solutions" element={<Solutions onNavigate={handleNavigate} />} />
+              <Route path="/products" element={<Products onNavigate={handleNavigate} />} />
+              <Route path="/portfolio" element={<Portfolio onNavigate={handleNavigate} />} />
+              <Route path="/contact" element={<Contact onNavigate={handleNavigate} />} />
+              <Route path="/start-project" element={<StartProject onNavigate={handleNavigate} />} />
+            </Routes>
+            <Footer onNavigate={handleNavigate} />
+          </div>
+        </PageBackgrounds>
+      </div>
+    );
 }
 
 function App() {

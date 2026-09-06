@@ -57,12 +57,11 @@ export function Contact({ onNavigate }) {
 
     setSubmitting(true);
     try {
-        // Contact.jsx
-        const res = await fetch('/api/contact-messages', {
+      const res = await fetch('/api/contact-messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
-        });
+      });
       const result = await res.json();
 
       if (result.success) setSubmitted(true);
@@ -76,20 +75,20 @@ export function Contact({ onNavigate }) {
 
   if (submitted) {
     return (
-      <div className="mx-auto flex max-w-[720px] flex-col items-center px-5 py-24 text-center sm:px-10">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#2F6FED] to-[#3B82F6] shadow-[0_0_35px_2px_rgba(47,111,237,0.5)]">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+      <div className="mx-auto flex max-w-[720px] flex-col items-center px-4 sm:px-6 py-16 sm:py-24 text-center">
+        <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#2F6FED] to-[#3B82F6] shadow-[0_0_35px_2px_rgba(47,111,237,0.5)]">
+          <svg width="24" height="24" sm:width="30" sm:height="30" viewBox="0 0 24 24" fill="none">
             <path d="M5 13l4 4L19 7" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
-        <h1 className="mt-6 text-[28px] font-extrabold text-[#F3F6FB] sm:text-[34px]">
+        <h1 className="mt-5 sm:mt-6 text-2xl sm:text-[28px] font-extrabold text-[#F3F6FB]">
           Thanks, {form.fullName.split(' ')[0]}!
         </h1>
-        <p className="mt-3 max-w-md text-[15px] leading-relaxed text-[#93A0B8]">
+        <p className="mt-2 sm:mt-3 max-w-md text-sm sm:text-[15px] leading-relaxed text-[#93A0B8]">
           We've received your message and will reach out to you at{' '}
           <span className="text-[#6FA0FF]">{form.phone}</span> soon.
         </p>
-        <div className="mt-8 flex gap-3.5">
+        <div className="mt-6 sm:mt-8 flex flex-wrap gap-3 sm:gap-3.5">
           <AnimatedButton label="Back to Home" primary onClick={() => onNavigate('/')} />
           <AnimatedButton
             label="Send Another Message"
@@ -104,10 +103,10 @@ export function Contact({ onNavigate }) {
   }
 
   return (
-    <div className="relative mx-auto max-w-[720px] px-5 pb-20 pt-10 sm:px-10 sm:pt-14 lg:px-0">
+    <div className="relative mx-auto max-w-[720px] px-4 sm:px-6 lg:px-0 pb-16 sm:pb-20 pt-8 sm:pt-10 sm:pt-14">
       <button
         onClick={() => onNavigate('/')}
-        className="mb-6 flex items-center gap-1.5 text-sm font-medium text-[#93A0B8] transition-colors hover:text-[#F3F6FB]"
+        className="mb-4 sm:mb-6 flex items-center gap-1.5 text-sm font-medium text-[#93A0B8] transition-colors hover:text-[#F3F6FB]"
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
           <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -115,23 +114,23 @@ export function Contact({ onNavigate }) {
         Back to Home
       </button>
 
-      <div className="inline-flex items-center gap-2 rounded-full border border-[#2F6FED]/20 bg-[#2F6FED]/[0.08] px-[13px] py-2">
-        <span className="h-[7px] w-[7px] rounded-full bg-[#3B82F6]" />
-        <span className="text-[10.5px] font-bold tracking-wider text-[#93A0B8]">GET IN TOUCH</span>
+      <div className="inline-flex items-center gap-2 rounded-full border border-[#2F6FED]/20 bg-[#2F6FED]/[0.08] px-3 sm:px-[13px] py-1.5 sm:py-2">
+        <span className="h-1.5 w-1.5 sm:h-[7px] sm:w-[7px] rounded-full bg-[#3B82F6]" />
+        <span className="text-[9px] sm:text-[10.5px] font-bold tracking-wider text-[#93A0B8]">GET IN TOUCH</span>
       </div>
 
-      <h1 className="mt-5 text-[32px] font-extrabold leading-tight text-[#F3F6FB] sm:text-[42px]">
+      <h1 className="mt-4 sm:mt-5 text-2xl sm:text-[32px] sm:text-[42px] font-extrabold leading-tight text-[#F3F6FB]">
         Let's Talk
         <span className="bg-gradient-to-r from-[#6FA0FF] to-[#A78BFA] bg-clip-text text-transparent">
           {' '}About Your Project
         </span>
       </h1>
-      <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-[#93A0B8]">
+      <p className="mt-2 sm:mt-3 max-w-lg text-sm sm:text-[15px] leading-relaxed text-[#93A0B8]">
         Leave us your name, number, and a quick note about what you need —
         we'll get back to you shortly.
       </p>
 
-      <form onSubmit={handleSubmit} className="mt-9 flex flex-col gap-6">
+      <form onSubmit={handleSubmit} className="mt-6 sm:mt-9 flex flex-col gap-5 sm:gap-6">
         <Field label="Full Name" required>
           <TextInput
             value={form.fullName}
@@ -153,7 +152,8 @@ export function Contact({ onNavigate }) {
 
         <Field label="What do you need help with?" required>
           <TextArea
-            rows={5}
+            rows={4}
+            sm:rows={5}
             value={form.description}
             onChange={update('description')}
             placeholder="Tell us briefly about your project or question…"
@@ -165,7 +165,7 @@ export function Contact({ onNavigate }) {
           label={submitting ? 'Sending…' : 'Send Message'}
           primary
           onClick={handleSubmit}
-          className="mt-2 w-full justify-center sm:w-fit"
+          className="mt-2 w-full sm:w-fit justify-center"
         />
       </form>
     </div>

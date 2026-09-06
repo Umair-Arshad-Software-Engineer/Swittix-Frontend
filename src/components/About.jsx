@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { PrimaryButton, SecondaryButton } from './AnimatedButton';
 import { HoverCard, useInView } from './Sections';
 
-// Import team images
 import umairImage from '../assets/images/umair.jpeg';
 import aliImage from '../assets/images/ali.jpeg';
 import maryamImage from '../assets/images/maryam.jpeg';
@@ -30,10 +29,6 @@ const staggerChildren = {
   },
 };
 
-// Mirrors HoverCard's exact hover/reveal mechanics (Sections.jsx) so team
-// cards animate identically to the "Technology That Solves Real Problems"
-// cards, even though the layout here is photo + name + role instead of
-// icon + title + description.
 function TeamCard({ image, alt, name, role, revealDelay = 0 }) {
   const [hover, setHover] = useState(false);
   const [ref, inView] = useInView();
@@ -43,7 +38,7 @@ function TeamCard({ image, alt, name, role, revealDelay = 0 }) {
       ref={ref}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className="rounded-2xl border bg-[#0A0E17] p-8 text-center"
+      className="rounded-2xl border bg-[#0A0E17] p-4 sm:p-8 text-center"
       style={{
         opacity: inView ? 1 : 0,
         transform: inView
@@ -61,7 +56,7 @@ function TeamCard({ image, alt, name, role, revealDelay = 0 }) {
       }}
     >
       <div
-        className="relative mx-auto mb-5 h-32 w-32 overflow-hidden rounded-full transition-all duration-300"
+        className="relative mx-auto mb-4 sm:mb-5 h-24 w-24 sm:h-32 sm:w-32 overflow-hidden rounded-full transition-all duration-300"
         style={{
           background: hover
             ? 'linear-gradient(to bottom right, rgba(111,160,255,0.2), rgba(167,139,250,0.2))'
@@ -79,8 +74,8 @@ function TeamCard({ image, alt, name, role, revealDelay = 0 }) {
           style={{ borderColor: 'transparent', boxShadow: hover ? '0 0 0 2px rgba(111,160,255,0.3)' : '0 0 0 0 rgba(111,160,255,0)' }}
         />
       </div>
-      <h4 className="text-lg font-semibold text-[#F3F6FB]">{name}</h4>
-      <p className="text-sm text-[#6FA0FF]">{role}</p>
+      <h4 className="text-base sm:text-lg font-semibold text-[#F3F6FB]">{name}</h4>
+      <p className="text-xs sm:text-sm text-[#6FA0FF]">{role}</p>
     </div>
   );
 }
@@ -93,14 +88,14 @@ export function About({ onNavigate }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="relative px-5 pt-20 pb-16 sm:px-10 lg:px-24"
+        className="relative px-4 sm:px-6 lg:px-10 pt-16 sm:pt-20 pb-12 sm:pb-16"
       >
         <div className="mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="mb-4 inline-block rounded-full border border-[#6FA0FF]/30 bg-[#6FA0FF]/10 px-5 py-1.5 text-sm font-medium text-[#6FA0FF]"
+            className="mb-3 sm:mb-4 inline-block rounded-full border border-[#6FA0FF]/30 bg-[#6FA0FF]/10 px-3 sm:px-5 py-1 text-xs sm:text-sm font-medium text-[#6FA0FF]"
           >
             Who We Are
           </motion.div>
@@ -109,7 +104,7 @@ export function About({ onNavigate }) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="mb-6 text-4xl font-bold leading-tight text-[#F3F6FB] sm:text-5xl lg:text-6xl"
+            className="mb-4 sm:mb-6 text-3xl sm:text-5xl lg:text-6xl font-bold leading-tight text-[#F3F6FB]"
           >
             Building the Future of
             <span className="bg-gradient-to-r from-[#6FA0FF] to-[#A78BFA] bg-clip-text text-transparent">
@@ -121,7 +116,7 @@ export function About({ onNavigate }) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4 }}
-            className="max-w-2xl text-lg text-[#93A0B8] sm:text-xl"
+            className="max-w-2xl text-base sm:text-lg lg:text-xl text-[#93A0B8]"
           >
             Swittix Technologies is a forward-thinking software development company
             dedicated to crafting exceptional digital experiences that drive business
@@ -132,7 +127,7 @@ export function About({ onNavigate }) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.5 }}
-            className="mt-10 flex flex-wrap gap-4"
+            className="mt-8 sm:mt-10 flex flex-wrap gap-3 sm:gap-4"
           >
             <PrimaryButton label="Start a Project" onClick={() => onNavigate('/start-project')} />
             <SecondaryButton label="View Our Work" onClick={() => onNavigate('/portfolio')} />
@@ -146,26 +141,26 @@ export function About({ onNavigate }) {
         initial="initial"
         whileInView="animate"
         viewport={{ once: true, amount: 0.15 }}
-        className="px-5 py-20 sm:px-10 lg:px-24"
+        className="px-4 sm:px-6 lg:px-10 py-16 sm:py-20"
       >
         <div className="mx-auto max-w-6xl">
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
+          <div className="grid gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-20">
             <motion.div variants={fadeInUp}>
-              <span className="text-sm font-semibold uppercase tracking-wider text-[#6FA0FF]">
+              <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#6FA0FF]">
                 Our Story
               </span>
-              <h2 className="mt-3 text-3xl font-bold text-[#F3F6FB] sm:text-4xl">
+              <h2 className="mt-2 sm:mt-3 text-2xl sm:text-4xl font-bold text-[#F3F6FB]">
                 Innovation Meets
                 <span className="bg-gradient-to-r from-[#6FA0FF] to-[#A78BFA] bg-clip-text text-transparent">
                   {' '}Excellence
                 </span>
               </h2>
-              <p className="mt-4 text-[#93A0B8]">
+              <p className="mt-3 sm:mt-4 text-sm sm:text-base text-[#93A0B8]">
                 Founded with a passion for technology and a vision to transform ideas into
                 impactful digital solutions, Swittix Technologies has grown into a trusted
                 partner for businesses worldwide.
               </p>
-              <p className="mt-4 text-[#93A0B8]">
+              <p className="mt-3 sm:mt-4 text-sm sm:text-base text-[#93A0B8]">
                 We believe in the power of technology to solve complex problems and create
                 meaningful connections. Our team brings together diverse expertise in
                 software development, design, and business strategy to deliver solutions
@@ -175,26 +170,26 @@ export function About({ onNavigate }) {
 
             <motion.div
               variants={fadeInUp}
-              className="relative rounded-2xl bg-gradient-to-br from-[#6FA0FF]/10 to-[#A78BFA]/10 p-8"
+              className="relative rounded-2xl bg-gradient-to-br from-[#6FA0FF]/10 to-[#A78BFA]/10 p-6 sm:p-8"
             >
-              <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-[#6FA0FF]/20 blur-2xl" />
-              <div className="absolute -bottom-4 -left-4 h-24 w-24 rounded-full bg-[#A78BFA]/20 blur-2xl" />
-              <div className="relative grid grid-cols-2 gap-6">
-                <div className="rounded-xl bg-[#0A0E17] p-6 text-center">
-                  <div className="text-3xl font-bold text-[#6FA0FF]">50+</div>
-                  <div className="mt-1 text-sm text-[#93A0B8]">Projects Delivered</div>
+              <div className="absolute -right-4 -top-4 h-16 w-16 sm:h-24 sm:w-24 rounded-full bg-[#6FA0FF]/20 blur-2xl" />
+              <div className="absolute -bottom-4 -left-4 h-16 w-16 sm:h-24 sm:w-24 rounded-full bg-[#A78BFA]/20 blur-2xl" />
+              <div className="relative grid grid-cols-2 gap-3 sm:gap-6">
+                <div className="rounded-xl bg-[#0A0E17] p-4 sm:p-6 text-center">
+                  <div className="text-2xl sm:text-3xl font-bold text-[#6FA0FF]">50+</div>
+                  <div className="mt-1 text-xs sm:text-sm text-[#93A0B8]">Projects Delivered</div>
                 </div>
-                <div className="rounded-xl bg-[#0A0E17] p-6 text-center">
-                  <div className="text-3xl font-bold text-[#A78BFA]">4.9★</div>
-                  <div className="mt-1 text-sm text-[#93A0B8]">Client Rating</div>
+                <div className="rounded-xl bg-[#0A0E17] p-4 sm:p-6 text-center">
+                  <div className="text-2xl sm:text-3xl font-bold text-[#A78BFA]">4.9★</div>
+                  <div className="mt-1 text-xs sm:text-sm text-[#93A0B8]">Client Rating</div>
                 </div>
-                <div className="rounded-xl bg-[#0A0E17] p-6 text-center">
-                  <div className="text-3xl font-bold text-[#6FA0FF]">30+</div>
-                  <div className="mt-1 text-sm text-[#93A0B8]">Team Members</div>
+                <div className="rounded-xl bg-[#0A0E17] p-4 sm:p-6 text-center">
+                  <div className="text-2xl sm:text-3xl font-bold text-[#6FA0FF]">30+</div>
+                  <div className="mt-1 text-xs sm:text-sm text-[#93A0B8]">Team Members</div>
                 </div>
-                <div className="rounded-xl bg-[#0A0E17] p-6 text-center">
-                  <div className="text-3xl font-bold text-[#A78BFA]">5+</div>
-                  <div className="mt-1 text-sm text-[#93A0B8]">Years of Excellence</div>
+                <div className="rounded-xl bg-[#0A0E17] p-4 sm:p-6 text-center">
+                  <div className="text-2xl sm:text-3xl font-bold text-[#A78BFA]">5+</div>
+                  <div className="mt-1 text-xs sm:text-sm text-[#93A0B8]">Years of Excellence</div>
                 </div>
               </div>
             </motion.div>
@@ -208,19 +203,19 @@ export function About({ onNavigate }) {
         initial="initial"
         whileInView="animate"
         viewport={{ once: true, amount: 0.15 }}
-        className="px-5 py-20 sm:px-10 lg:px-24"
+        className="px-4 sm:px-6 lg:px-10 py-16 sm:py-20"
       >
         <div className="mx-auto max-w-6xl">
           <motion.div variants={fadeInUp} className="text-center">
-            <span className="text-sm font-semibold uppercase tracking-wider text-[#6FA0FF]">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#6FA0FF]">
               What Drives Us
             </span>
-            <h2 className="mt-3 text-3xl font-bold text-[#F3F6FB] sm:text-4xl">
+            <h2 className="mt-2 sm:mt-3 text-2xl sm:text-4xl font-bold text-[#F3F6FB]">
               Our Mission & Values
             </h2>
           </motion.div>
 
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 sm:mt-12 grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {[
               {
                 icon: "🎯",
@@ -255,7 +250,7 @@ export function About({ onNavigate }) {
             ].map((item, index) => (
               <HoverCard
                 key={item.title}
-                icon={<span className="text-2xl leading-none">{item.icon}</span>}
+                icon={<span className="text-xl sm:text-2xl leading-none">{item.icon}</span>}
                 title={item.title}
                 description={item.description}
                 revealDelay={(index % 3) * 90}
@@ -265,32 +260,32 @@ export function About({ onNavigate }) {
         </div>
       </motion.section>
 
-      {/* Team Section with Larger Images */}
+      {/* Team Section */}
       <motion.section
         variants={fadeIn}
         initial="initial"
         whileInView="animate"
         viewport={{ once: true, amount: 0.15 }}
-        className="px-5 py-20 sm:px-10 lg:px-24"
+        className="px-4 sm:px-6 lg:px-10 py-16 sm:py-20"
       >
         <div className="mx-auto max-w-6xl">
           <motion.div variants={fadeInUp} className="text-center">
-            <span className="text-sm font-semibold uppercase tracking-wider text-[#6FA0FF]">
+            <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[#6FA0FF]">
               Our Team
             </span>
-            <h2 className="mt-3 text-3xl font-bold text-[#F3F6FB] sm:text-4xl">
+            <h2 className="mt-2 sm:mt-3 text-2xl sm:text-4xl font-bold text-[#F3F6FB]">
               Meet the People Behind
               <span className="bg-gradient-to-r from-[#6FA0FF] to-[#A78BFA] bg-clip-text text-transparent">
                 {' '}the Magic
               </span>
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-[#93A0B8]">
+            <p className="mx-auto mt-3 sm:mt-4 max-w-2xl text-sm sm:text-base text-[#93A0B8]">
               A passionate team of developers, designers, and strategists committed to
               bringing your vision to life.
             </p>
           </motion.div>
 
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 sm:mt-12 grid gap-4 sm:gap-6 lg:gap-8 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { 
                 name: "Umair Arshad", 
@@ -336,24 +331,24 @@ export function About({ onNavigate }) {
         initial="initial"
         whileInView="animate"
         viewport={{ once: true, amount: 0.1 }}
-        className="px-5 py-20 sm:px-10 lg:px-24"
+        className="px-4 sm:px-6 lg:px-10 py-16 sm:py-20"
       >
-        <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl bg-gradient-to-br from-[#0A0E17] to-[#0F1623] p-12 text-center">
-          <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#6FA0FF]/10 blur-3xl" />
-          <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-[#A78BFA]/10 blur-3xl" />
+        <div className="relative mx-auto max-w-6xl overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#0A0E17] to-[#0F1623] p-6 sm:p-12 text-center">
+          <div className="absolute -right-20 -top-20 h-48 w-48 sm:h-64 sm:w-64 rounded-full bg-[#6FA0FF]/10 blur-3xl" />
+          <div className="absolute -bottom-20 -left-20 h-48 w-48 sm:h-64 sm:w-64 rounded-full bg-[#A78BFA]/10 blur-3xl" />
           
           <div className="relative">
-            <h2 className="text-3xl font-bold text-[#F3F6FB] sm:text-4xl">
+            <h2 className="text-2xl sm:text-4xl font-bold text-[#F3F6FB]">
               Ready to Build Something
               <span className="bg-gradient-to-r from-[#6FA0FF] to-[#A78BFA] bg-clip-text text-transparent">
                 {' '}Amazing?
               </span>
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-[#93A0B8]">
+            <p className="mx-auto mt-3 sm:mt-4 max-w-2xl text-sm sm:text-base text-[#93A0B8]">
               Let's turn your ideas into reality. Whether you're starting from scratch or
               looking to scale, we're here to help.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <div className="mt-6 sm:mt-8 flex flex-wrap justify-center gap-3 sm:gap-4">
               <PrimaryButton label="Start a Project" onClick={() => onNavigate('/start-project')} />
               <SecondaryButton label="Let's Talk" onClick={() => onNavigate('/contact')} />
             </div>
