@@ -1,27 +1,48 @@
 /* ============================================================
-   THEME TOKENS — mirrors theme.dart's AppColors 1:1
+   THEME — light default, dark available via [data-theme="dark"]
+   All colors mirror src/theme.js `colors` export.
    ============================================================ */
-:root {
-  /* Lightened from near-black (#05070c/#0a0e17) to a subtle navy/charcoal
-     so the site doesn't read as pure black. Hue kept the same, just
-     brought up in lightness. */
-  --bg: #0a0f1a;
-  --surface: #131a29;
-  --surface-alt: #171f30;
-  --border: #263049;
+:root,
+[data-theme="light"] {
+  --bg:            #F7F9FC;
+  --surface:       #FFFFFF;
+  --surface-alt:   #EEF2F9;
+  --surface-muted: #E4EAF3;
+  --header-bg:     rgba(255,255,255,0.92);
+  --overlay:       rgba(15,22,35,0.55);
 
-  --primary: #2f6fed;
-  --primary-light: #6fa0ff;
-  --primary-dark: #1b3e99;
-  --accent: #3b82f6;
-  --accent-cyan: #22d3ee;
+  --border:        #D7DFEB;
+  --border-strong: #B8C4D8;
+  --border-focus:  #2F6FED;
 
-  --text-primary: #f3f6fb;
-  --text-secondary: #93a0b8;
-  --text-muted: #5b677e;
-  --error: #ef4444;
+  --text-primary:   #0F1B2D;
+  --text-secondary: #45536B;
+  --text-muted:     #6B7A93;
+  --text-faint:     #94A2B8;
+  --text-on-accent: #FFFFFF;
 
-  /* Responsive spacing tokens */
+  --primary:        #2F6FED;
+  --primary-hover:  #1B4FCB;
+  --primary-light:  #6FA0FF;
+  --primary-dark:   #1B3E99;
+  --accent:         #3B82F6;
+  --accent-cyan:    #0891B2;
+  --purple:         #8B5CF6;
+
+  --success:    #16A34A;
+  --success-bg: rgba(22,163,74,0.12);
+  --error:      #DC2626;
+  --error-bg:   rgba(220,38,38,0.10);
+
+  --primary-soft:       rgba(47,111,237,0.08);
+  --primary-soft-hover: rgba(47,111,237,0.14);
+  --primary-border-soft:rgba(47,111,237,0.22);
+  --purple-soft:        rgba(139,92,246,0.10);
+  --purple-soft-hover:  rgba(139,92,246,0.18);
+
+  --shadow:        rgba(15,27,45,0.08);
+  --shadow-strong: rgba(15,27,45,0.14);
+
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
   --space-md: 1rem;
@@ -29,7 +50,6 @@
   --space-xl: 2rem;
   --space-2xl: 3rem;
 
-  /* Responsive font sizes */
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -41,7 +61,6 @@
   --text-5xl: 3rem;
   --text-6xl: 3.75rem;
 
-  /* Container widths */
   --container-sm: 640px;
   --container-md: 768px;
   --container-lg: 1024px;
@@ -49,9 +68,48 @@
   --container-2xl: 1432px;
 }
 
-* {
-  box-sizing: border-box;
+[data-theme="dark"] {
+  --bg:            #0a0f1a;
+  --surface:       #1a2236;
+  --surface-alt:   #1f2a42;
+  --surface-muted: #131a29;
+  --header-bg:     rgba(5,7,12,0.95);
+  --overlay:       rgba(0,0,0,0.60);
+
+  --border:        #33415e;
+  --border-strong: #475574;
+  --border-focus:  #3B82F6;
+
+  --text-primary:   #f3f6fb;
+  --text-secondary: #a8b4cc;
+  --text-muted:     #7484a0;
+  --text-faint:     #5b677e;
+  --text-on-accent: #FFFFFF;
+
+  --primary:        #2f6fed;
+  --primary-hover:  #4c86ff;
+  --primary-light:  #6fa0ff;
+  --primary-dark:   #1b3e99;
+  --accent:         #3b82f6;
+  --accent-cyan:    #22d3ee;
+  --purple:         #A78BFA;
+
+  --success:    #22c55e;
+  --success-bg: rgba(34,197,94,0.15);
+  --error:      #ef4444;
+  --error-bg:   rgba(239,68,68,0.15);
+
+  --primary-soft:       rgba(47,111,237,0.10);
+  --primary-soft-hover: rgba(47,111,237,0.18);
+  --primary-border-soft:rgba(47,111,237,0.28);
+  --purple-soft:        rgba(167,139,250,0.14);
+  --purple-soft-hover:  rgba(167,139,250,0.22);
+
+  --shadow:        rgba(0,0,0,0.35);
+  --shadow-strong: rgba(0,0,0,0.55);
 }
+
+* { box-sizing: border-box; }
 
 html,
 body,
@@ -70,10 +128,8 @@ body {
 }
 
 /* ============================================================
-   RESPONSIVE UTILITY CLASSES
+   RESPONSIVE UTILITIES
    ============================================================ */
-
-/* Container with responsive padding */
 .container-responsive {
   width: 100%;
   max-width: var(--container-2xl);
@@ -82,403 +138,116 @@ body {
   padding-left: var(--space-md);
   padding-right: var(--space-md);
 }
-
 @media (min-width: 640px) {
-  .container-responsive {
-    padding-left: var(--space-lg);
-    padding-right: var(--space-lg);
-  }
+  .container-responsive { padding-left: var(--space-lg); padding-right: var(--space-lg); }
 }
-
 @media (min-width: 1024px) {
-  .container-responsive {
-    padding-left: var(--space-2xl);
-    padding-right: var(--space-2xl);
-  }
+  .container-responsive { padding-left: var(--space-2xl); padding-right: var(--space-2xl); }
 }
 
-/* Responsive text utilities */
-.text-hero {
-  font-size: var(--text-3xl);
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
-}
+.text-hero { font-size: var(--text-3xl); font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; }
+@media (min-width: 640px) { .text-hero { font-size: var(--text-5xl); } }
+@media (min-width: 1024px) { .text-hero { font-size: var(--text-6xl); } }
 
-@media (min-width: 640px) {
-  .text-hero {
-    font-size: var(--text-5xl);
-  }
-}
+.text-section-title { font-size: var(--text-2xl); font-weight: 800; line-height: 1.2; }
+@media (min-width: 640px) { .text-section-title { font-size: var(--text-4xl); } }
 
-@media (min-width: 1024px) {
-  .text-hero {
-    font-size: var(--text-6xl);
-  }
-}
+.text-section-sub { font-size: var(--text-sm); line-height: 1.6; color: var(--text-secondary); }
+@media (min-width: 640px) { .text-section-sub { font-size: var(--text-base); } }
 
-.text-section-title {
-  font-size: var(--text-2xl);
-  font-weight: 800;
-  line-height: 1.2;
-}
+.grid-responsive { display: grid; gap: var(--space-md); }
+@media (min-width: 640px) { .grid-responsive { gap: var(--space-lg); } }
+@media (min-width: 1024px) { .grid-responsive { gap: var(--space-xl); } }
 
-@media (min-width: 640px) {
-  .text-section-title {
-    font-size: var(--text-4xl);
-  }
-}
+.card-padding { padding: var(--space-md); }
+@media (min-width: 640px) { .card-padding { padding: var(--space-lg); } }
+@media (min-width: 1024px) { .card-padding { padding: var(--space-xl); } }
 
-.text-section-sub {
-  font-size: var(--text-sm);
-  line-height: 1.6;
-  color: var(--text-secondary);
-}
+.tap-target { min-height: 44px; min-width: 44px; }
 
-@media (min-width: 640px) {
-  .text-section-sub {
-    font-size: var(--text-base);
-  }
-}
-
-/* Responsive grid */
-.grid-responsive {
-  display: grid;
-  gap: var(--space-md);
-}
-
-@media (min-width: 640px) {
-  .grid-responsive {
-    gap: var(--space-lg);
-  }
-}
-
-@media (min-width: 1024px) {
-  .grid-responsive {
-    gap: var(--space-xl);
-  }
-}
-
-/* Card padding responsive */
-.card-padding {
-  padding: var(--space-md);
-}
-
-@media (min-width: 640px) {
-  .card-padding {
-    padding: var(--space-lg);
-  }
-}
-
-@media (min-width: 1024px) {
-  .card-padding {
-    padding: var(--space-xl);
-  }
-}
-
-/* Touch-friendly tap targets */
-.tap-target {
-  min-height: 44px;
-  min-width: 44px;
-}
-
-/* Responsive spacing */
-.section-spacing {
-  padding-top: var(--space-xl);
-  padding-bottom: var(--space-xl);
-}
-
-@media (min-width: 640px) {
-  .section-spacing {
-    padding-top: var(--space-2xl);
-    padding-bottom: var(--space-2xl);
-  }
-}
+.section-spacing { padding-top: var(--space-xl); padding-bottom: var(--space-xl); }
+@media (min-width: 640px) { .section-spacing { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); } }
 
 /* ============================================================
    ANIMATIONS
    ============================================================ */
-
-/* Button idle shimmer sweep (primary buttons) */
 @keyframes shimmer-sweep {
-  0% {
-    transform: translateX(-130%) skewX(-12deg);
-  }
-  100% {
-    transform: translateX(130%) skewX(-12deg);
-  }
+  0%   { transform: translateX(-130%) skewX(-12deg); }
+  100% { transform: translateX(130%) skewX(-12deg); }
 }
-.animate-shimmer {
-  animation: shimmer-sweep 2.6s linear infinite;
-}
+.animate-shimmer { animation: shimmer-sweep 2.6s linear infinite; }
 
-/* Tap ripple burst */
 @keyframes ripple-burst {
-  0% {
-    transform: scale(0);
-    opacity: 0.45;
-  }
-  100% {
-    transform: scale(28);
-    opacity: 0;
-  }
+  0%   { transform: scale(0); opacity: 0.45; }
+  100% { transform: scale(28); opacity: 0; }
 }
-.animate-ripple {
-  animation: ripple-burst 0.6s ease-out forwards;
-}
+.animate-ripple { animation: ripple-burst 0.6s ease-out forwards; }
 
-/* Blinking type cursor */
 @keyframes blink {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  51%,
-  100% {
-    opacity: 0;
-  }
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
-.cursor-blink {
-  animation: blink 1s steps(1) infinite;
-}
+.cursor-blink { animation: blink 1s steps(1) infinite; }
 
-/* Pulsing status dot */
 @keyframes pulse-dot {
-  0%,
-  100% {
-    box-shadow: 0 0 6px 0 rgba(59, 130, 246, 0.5);
-    opacity: 0.7;
-  }
-  50% {
-    box-shadow: 0 0 12px 3px rgba(59, 130, 246, 0.6);
-    opacity: 1;
-  }
+  0%, 100% { box-shadow: 0 0 6px 0 rgba(59,130,246,0.5); opacity: 0.7; }
+  50%      { box-shadow: 0 0 12px 3px rgba(59,130,246,0.6); opacity: 1; }
 }
-.animate-pulse-dot {
-  animation: pulse-dot 1.6s ease-in-out infinite;
-}
+.animate-pulse-dot { animation: pulse-dot 1.6s ease-in-out infinite; }
 
-/* Ambient glow blob drifting behind the hero headline */
-@keyframes glow-drift {
-  0% {
-    transform: translate(0, 0);
-  }
-  25% {
-    transform: translate(18px, 10px);
-  }
-  50% {
-    transform: translate(0, 18px);
-  }
-  75% {
-    transform: translate(-18px, 8px);
-  }
-  100% {
-    transform: translate(0, 0);
-  }
-}
-.animate-glow-drift {
-  animation: glow-drift 12s ease-in-out infinite;
-}
-
-/* Slow pulsing scale on the hero visual's outer glow */
-@keyframes glow-pulse {
-  0%,
-  100% {
-    transform: scale(0.92);
-  }
-  50% {
-    transform: scale(0.96);
-  }
-}
-.animate-glow-pulse {
-  animation: glow-pulse 4s ease-in-out infinite;
-}
-
-/* Gentle wobble on the central rotating icon */
-@keyframes icon-wobble {
-  0%,
-  100% {
-    transform: rotate(-2.2deg);
-  }
-  50% {
-    transform: rotate(2.2deg);
-  }
-}
-.animate-icon-wobble {
-  animation: icon-wobble 6s ease-in-out infinite;
-}
-
-/* Floating stat cards bobbing up/down */
-@keyframes float-bob {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-.animate-float-bob {
-  animation: float-bob 3.6s ease-in-out infinite;
-}
-
-/* Orbit rotation for the two small dots around the hero visual */
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-.animate-spin-slow {
-  animation: spin 10s linear infinite;
-}
-
-/* Infinite logo marquee */
 @keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
-.animate-marquee {
-  animation: marquee 34s linear infinite;
+.animate-marquee { animation: marquee 34s linear infinite; }
+.animate-marquee:hover { animation-play-state: paused; }
+@media (max-width: 640px) {
+  .animate-marquee { animation-duration: 44s !important; }
 }
 
-/* Fine dot-grid used behind the hero visual card */
 .grid-pattern {
   background-image: radial-gradient(var(--border) 0.6px, transparent 0.6px);
   background-size: 28px 28px;
-  opacity: 0.35;
+  opacity: 0.55;
 }
-
-/* ============================================================
-   RESPONSIVE ANIMATION OPTIMIZATIONS
-   ============================================================ */
-
-/* Reduce animation intensity on mobile for better performance */
-@media (max-width: 640px) {
-  .animate-float-bob {
-    animation-duration: 4s !important;
-    animation-timing-function: ease-in-out !important;
-  }
-
-  .animate-glow-pulse {
-    animation-duration: 5s !important;
-  }
-
-  .animate-icon-wobble {
-    animation-duration: 8s !important;
-  }
-
-  .animate-spin-slow {
-    animation-duration: 14s !important;
-  }
-
-  .animate-marquee {
-    animation-duration: 40s !important;
-  }
-
-  .animate-pulse-dot {
-    animation-duration: 2s !important;
-  }
-}
-
-/* ============================================================
-   REDUCED MOTION PREFERENCE
-   ============================================================ */
+[data-theme="dark"] .grid-pattern { opacity: 0.35; }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-
-  .animate-shimmer,
-  .animate-ripple,
-  .cursor-blink,
-  .animate-pulse-dot,
-  .animate-glow-drift,
-  .animate-glow-pulse,
-  .animate-icon-wobble,
-  .animate-float-bob,
-  .animate-spin-slow,
-  .animate-marquee {
+  .animate-shimmer, .animate-ripple, .cursor-blink,
+  .animate-pulse-dot, .animate-marquee {
     animation: none !important;
   }
 }
 
 /* ============================================================
-   SAFE AREA SUPPORT (Notched phones)
+   SAFE AREA
    ============================================================ */
-
 @supports (padding: max(0px)) {
-  .safe-bottom {
-    padding-bottom: max(var(--space-md), env(safe-area-inset-bottom));
-  }
-
-  .safe-top {
-    padding-top: max(var(--space-md), env(safe-area-inset-top));
-  }
-
-  .safe-horizontal {
-    padding-left: max(var(--space-md), env(safe-area-inset-left));
+  .safe-bottom    { padding-bottom: max(var(--space-md), env(safe-area-inset-bottom)); }
+  .safe-top       { padding-top:    max(var(--space-md), env(safe-area-inset-top)); }
+  .safe-horizontal{
+    padding-left:  max(var(--space-md), env(safe-area-inset-left));
     padding-right: max(var(--space-md), env(safe-area-inset-right));
   }
 }
 
 /* ============================================================
-   SCROLLBAR STYLING
+   SCROLLBAR
    ============================================================ */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+* { scrollbar-width: thin; scrollbar-color: var(--border-strong) var(--bg); }
 
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+::selection { background: var(--primary); color: var(--text-on-accent); }
 
-::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-light);
-}
-
-/* Firefox scrollbar */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) var(--bg);
-}
-
-/* ============================================================
-   SELECTION COLOR
-   ============================================================ */
-
-::selection {
-  background: var(--primary);
-  color: white;
-}
-
-/* ============================================================
-   FOCUS VISIBLE ACCESSIBILITY
-   ============================================================ */
-
-:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
-
-/* ============================================================
-   RESPONSIVE BREAKPOINT HELPERS (for JS use)
-   ============================================================ */
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 
 @custom-media --sm (min-width: 640px);
 @custom-media --md (min-width: 768px);

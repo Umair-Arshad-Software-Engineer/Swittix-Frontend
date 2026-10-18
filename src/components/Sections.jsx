@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { colors } from '../theme';
 
 export function useInView(threshold = 0.15) {
   const ref = useRef(null);
@@ -7,29 +8,19 @@ export function useInView(threshold = 0.15) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.unobserve(el);
-        }
+        if (entry.isIntersecting) { setInView(true); observer.unobserve(el); }
       },
       { threshold, rootMargin: '0px 0px -20px 0px' }
     );
-
     observer.observe(el);
-
     const recheckId = setTimeout(() => {
       const rect = el.getBoundingClientRect();
       const visible = rect.top < window.innerHeight && rect.bottom > 0;
       if (visible) setInView(true);
     }, 150);
-
-    return () => {
-      clearTimeout(recheckId);
-      observer.disconnect();
-    };
+    return () => { clearTimeout(recheckId); observer.disconnect(); };
   }, [threshold]);
 
   return [ref, inView];
@@ -44,40 +35,48 @@ export function HoverCard({ icon, number, title, description, revealDelay = 0 })
       ref={ref}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className="rounded-[18px] border bg-[#0A0E17] p-4 sm:p-6 transition-all duration-200 ease-out"
+      className="rounded-[18px] p-4 sm:p-6 transition-all duration-200 ease-out"
       style={{
         opacity: inView ? 1 : 0,
         transform: inView
-          ? hover
-            ? 'translateY(-6px) scale(1)'
-            : 'translateY(0) scale(1)'
+          ? hover ? 'translateY(-6px) scale(1)' : 'translateY(0) scale(1)'
           : 'translateY(0) scale(0.82)',
         transformOrigin: 'center center',
         transitionProperty: 'opacity, transform, border-color, box-shadow',
         transitionDuration: inView && !hover ? '600ms' : '200ms',
         transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
         transitionDelay: inView ? `${revealDelay}ms` : '0ms',
-        borderColor: hover ? 'rgba(47,111,237,0.4)' : '#1A2233',
-        boxShadow: hover ? '0 12px 30px -4px rgba(47,111,237,0.12)' : 'none',
+        backgroundColor: colors.surface,
+        border: `1px solid ${hover ? colors.primaryBorderSoft : colors.border}`,
+        boxShadow: hover ? '0 12px 30px -4px rgba(15,27,45,0.10)' : 'none',
       }}
     >
       <div className="flex items-center justify-between">
         <div
           className="flex h-[40px] w-[40px] sm:h-[50px] sm:w-[50px] items-center justify-center rounded-2xl transition-all duration-200"
           style={{
-            background: hover
-              ? 'linear-gradient(to bottom right,#2F6FED,#3B82F6)'
-              : 'rgba(47,111,237,0.08)',
-            color: hover ? '#fff' : '#6FA0FF',
+            background: hover ? colors.gradientPrimary : colors.primarySoft,
+            color: hover ? colors.textOnAccent : colors.primary,
           }}
         >
           {icon}
         </div>
-        {number && <span className="text-2xl sm:text-[28px] font-extrabold text-[#1A2233]">{number}</span>}
+        {number && (
+          <span
+            className="text-2xl sm:text-[28px] font-extrabold"
+            style={{ color: colors.borderStrong }}
+          >
+            {number}
+          </span>
+        )}
       </div>
 
-      <h3 className="mt-4 sm:mt-[22px] text-base sm:text-[17px] font-extrabold text-[#F3F6FB]">{title}</h3>
-      <p className="mt-2 sm:mt-2.5 text-xs sm:text-[13.5px] leading-[1.6] text-[#93A0B8]">{description}</p>
+      <h3 className="mt-4 sm:mt-[22px] text-base sm:text-[17px] font-extrabold" style={{ color: colors.textPrimary }}>
+        {title}
+      </h3>
+      <p className="mt-2 sm:mt-2.5 text-xs sm:text-[13.5px] leading-[1.6]" style={{ color: colors.textSecondary }}>
+        {description}
+      </p>
     </div>
   );
 }
@@ -85,10 +84,12 @@ export function HoverCard({ icon, number, title, description, revealDelay = 0 })
 function SectionHeading({ title, subtitle }) {
   return (
     <div className="mx-auto max-w-2xl text-center">
-      <h2 className="text-2xl sm:text-[28px] lg:text-[42px] font-extrabold tracking-tight text-[#F3F6FB]">
+      <h2 className="text-2xl sm:text-[28px] lg:text-[42px] font-extrabold tracking-tight" style={{ color: colors.textPrimary }}>
         {title}
       </h2>
-      <p className="mt-2 sm:mt-3.5 text-sm sm:text-[15px] leading-[1.6] text-[#93A0B8]">{subtitle}</p>
+      <p className="mt-2 sm:mt-3.5 text-sm sm:text-[15px] leading-[1.6]" style={{ color: colors.textSecondary }}>
+        {subtitle}
+      </p>
     </div>
   );
 }

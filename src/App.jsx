@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import './theme.css';
@@ -24,7 +24,9 @@ import { Solutions } from './components/Solutions';
 import { Portfolio } from './components/Portfolio';
 import { Contact } from './components/Contact';
 
-const INITIAL_LOAD_MS = 800;
+// Initial load: wait for the logo animation to finish (~1.8s), hold briefly, then reveal.
+const INITIAL_HOLD_MS = 300;        // pause on the finished logo before fading out
+const INITIAL_MAX_MS = 3500;        // safety net in case the animation never reports completion
 const ROUTE_LOAD_MS = 400;
 
 function HomePage({ onNavigate }) {
@@ -46,11 +48,22 @@ function AppShell() {
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   const [initialLoading, setInitialLoading] = useState(true);
+  const [iconDone, setIconDone] = useState(false);
   const [routeLoading, setRouteLoading] = useState(false);
   const isFirstRender = useRef(true);
 
+  const handleIconComplete = useCallback(() => setIconDone(true), []);
+
+  // Hide the initial loader shortly after the icon animation completes
   useEffect(() => {
-    const id = setTimeout(() => setInitialLoading(false), INITIAL_LOAD_MS);
+    if (!iconDone) return;
+    const id = setTimeout(() => setInitialLoading(false), INITIAL_HOLD_MS);
+    return () => clearTimeout(id);
+  }, [iconDone]);
+
+  // Safety net: never leave the user stuck on the loader
+  useEffect(() => {
+    const id = setTimeout(() => setInitialLoading(false), INITIAL_MAX_MS);
     return () => clearTimeout(id);
   }, []);
 
@@ -70,12 +83,15 @@ function AppShell() {
   };
 
   const showLoader = initialLoading || routeLoading;
+  const loaderVariant = initialLoading ? 'full' : 'route';
 
   if (isAdminRoute) {
     return (
       <AdminErrorBoundary>
         <AnimatePresence>
-          {showLoader && <Loader key="loader" variant={initialLoading ? 'full' : 'route'} />}
+          {showLoader && (
+            <Loader key="loader" variant={loaderVariant} onComplete={handleIconComplete} />
+          )}
         </AnimatePresence>
         <Routes>
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -92,33 +108,33 @@ function AppShell() {
     );
   }
 
-    // In App.jsx, add pt-[60px] sm:pt-20 to account for the fixed navbar
+  return (
+    <div className="min-h-screen overflow-x-hidden" style={{ backgroundColor: 'var(--bg)' }}>
+      <AnimatePresence>
+        {showLoader && (
+          <Loader key="loader" variant={loaderVariant} onComplete={handleIconComplete} />
+        )}
+      </AnimatePresence>
 
-    return (
-      <div className="min-h-screen bg-[#05070C] overflow-x-hidden">
-        <AnimatePresence>
-          {showLoader && <Loader key="loader" variant={initialLoading ? 'full' : 'route'} />}
-        </AnimatePresence>
+      <NavBar currentRoute={location.pathname} onNavigate={handleNavigate} />
 
-        <NavBar currentRoute={location.pathname} onNavigate={handleNavigate} />
-
-        <PageBackgrounds routeKey={location.pathname}>
-          <div className="pt-[60px] sm:pt-20">
-            <Routes>
-              <Route path="/" element={<HomePage onNavigate={handleNavigate} />} />
-              <Route path="/about" element={<About onNavigate={handleNavigate} />} />
-              <Route path="/services" element={<Services onNavigate={handleNavigate} />} />
-              <Route path="/solutions" element={<Solutions onNavigate={handleNavigate} />} />
-              <Route path="/products" element={<Products onNavigate={handleNavigate} />} />
-              <Route path="/portfolio" element={<Portfolio onNavigate={handleNavigate} />} />
-              <Route path="/contact" element={<Contact onNavigate={handleNavigate} />} />
-              <Route path="/start-project" element={<StartProject onNavigate={handleNavigate} />} />
-            </Routes>
-            <Footer onNavigate={handleNavigate} />
-          </div>
-        </PageBackgrounds>
-      </div>
-    );
+      <PageBackgrounds routeKey={location.pathname}>
+        <div className="pt-[60px] sm:pt-20">
+          <Routes>
+            <Route path="/" element={<HomePage onNavigate={handleNavigate} />} />
+            <Route path="/about" element={<About onNavigate={handleNavigate} />} />
+            <Route path="/services" element={<Services onNavigate={handleNavigate} />} />
+            <Route path="/solutions" element={<Solutions onNavigate={handleNavigate} />} />
+            <Route path="/products" element={<Products onNavigate={handleNavigate} />} />
+            <Route path="/portfolio" element={<Portfolio onNavigate={handleNavigate} />} />
+            <Route path="/contact" element={<Contact onNavigate={handleNavigate} />} />
+            <Route path="/start-project" element={<StartProject onNavigate={handleNavigate} />} />
+          </Routes>
+          <Footer onNavigate={handleNavigate} />
+        </div>
+      </PageBackgrounds>
+    </div>
+  );
 }
 
 function App() {

@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { colors } from '../theme';
 
 export function AnimatedButton({ label, icon, primary = false, onClick, className = '' }) {
   const [hover, setHover] = useState(false);
@@ -16,36 +17,31 @@ export function AnimatedButton({ label, icon, primary = false, onClick, classNam
   return (
     <button
       onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => {
-        setHover(false);
-        setPressed(false);
-      }}
-      onMouseDown={(e) => {
-        setPressed(true);
-        fire(e);
-      }}
+      onMouseLeave={() => { setHover(false); setPressed(false); }}
+      onMouseDown={(e) => { setPressed(true); fire(e); }}
       onMouseUp={() => setPressed(false)}
       onClick={onClick}
       className={[
         'relative inline-flex items-center gap-1.5 sm:gap-2 overflow-hidden rounded-[10px]',
         'px-3 sm:px-5 py-2.5 sm:py-3.5 text-xs sm:text-sm font-bold transition-transform duration-150 ease-out',
         pressed ? 'scale-[0.96]' : hover ? 'scale-[1.045]' : 'scale-100',
-        primary
-          ? 'text-white bg-gradient-to-br from-[#2F6FED] to-[#3B82F6]'
-          : 'text-[#F3F6FB] bg-[#0A0E17] border',
-        primary ? '' : hover ? 'border-[#2F6FED]/50' : 'border-[#1A2233]',
         className,
       ].join(' ')}
       style={
         primary
           ? {
+              color: colors.textOnAccent,
+              background: colors.gradientPrimary,
               boxShadow: hover
                 ? '0 8px 32px -2px rgba(47,111,237,0.4)'
                 : '0 8px 15px -4px rgba(47,111,237,0.25)',
             }
-          : hover
-          ? { boxShadow: '0 6px 20px -6px rgba(47,111,237,0.15)' }
-          : undefined
+          : {
+              color: colors.textPrimary,
+              backgroundColor: colors.surface,
+              border: `1px solid ${hover ? colors.primaryBorderSoft : colors.border}`,
+              boxShadow: hover ? '0 6px 20px -6px rgba(47,111,237,0.15)' : 'none',
+            }
       }
     >
       {primary && (
@@ -83,13 +79,12 @@ export function PrimaryButton({ label, onClick }) {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onClick={onClick}
-      className={`rounded-lg px-4 sm:px-[22px] py-2 sm:py-3 text-xs sm:text-sm font-semibold text-white transition-transform duration-150 ${
+      className={`rounded-lg px-4 sm:px-[22px] py-2 sm:py-3 text-xs sm:text-sm font-semibold transition-transform duration-150 ${
         hover ? 'scale-[1.02]' : ''
       }`}
       style={{
-        background: hover
-          ? 'linear-gradient(to bottom right,#4C86FF,#22D3EE)'
-          : 'linear-gradient(to bottom right,#2F6FED,#1B3E99)',
+        background: hover ? colors.gradientPrimaryHover : colors.gradientPrimary,
+        color: colors.textOnAccent,
         boxShadow: `0 8px ${hover ? 28 : 14}px 0 rgba(47,111,237,${hover ? 0.45 : 0.25})`,
       }}
     >
@@ -99,10 +94,18 @@ export function PrimaryButton({ label, onClick }) {
 }
 
 export function SecondaryButton({ label, onClick }) {
+  const [hover, setHover] = useState(false);
   return (
     <button
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
       onClick={onClick}
-      className="rounded-full border border-[#6FA0FF]/30 px-4 sm:px-8 py-2.5 sm:py-3.5 text-xs sm:text-sm font-semibold text-[#F3F6FB] transition-all duration-300 hover:border-[#6FA0FF] hover:bg-[#6FA0FF]/10"
+      className="rounded-full px-4 sm:px-8 py-2.5 sm:py-3.5 text-xs sm:text-sm font-semibold transition-all duration-300"
+      style={{
+        color: hover ? colors.primary : colors.textPrimary,
+        border: `1px solid ${hover ? colors.primary : colors.borderStrong}`,
+        backgroundColor: hover ? colors.primarySoft : 'transparent',
+      }}
     >
       {label}
     </button>

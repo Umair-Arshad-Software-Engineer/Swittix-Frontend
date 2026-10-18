@@ -1,63 +1,37 @@
 import { motion } from 'framer-motion';
-import swittixLogo from '../assets/images/swittixlogo.png';
+import { SwittixIcon } from './SwittixIcon'; // adjust path to wherever you saved it
+import { colors } from '../theme';
 
-export function Loader({ variant = 'full' }) {
+// variant="full"  -> first page load: icon plays its entrance animation, then calls onComplete
+// variant="route" -> quick route change: static icon, no animation, no waiting
+export function Loader({ variant = 'full', onComplete }) {
   const isFull = variant === 'full';
-  const ringSize = isFull ? 140 : 100;
-  const glowSize = isFull ? 320 : 220;
-  const logoSize = isFull ? 96 : 68;
+  const logoWidth = isFull ? 140 : 100;
 
   return (
     <motion.div
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4, ease: 'easeInOut' }}
-      className="fixed inset-0 z-[999] flex items-center justify-center bg-[#05070C]"
+      className="fixed inset-0 z-[999] flex items-center justify-center"
+      style={{ backgroundColor: colors.bg }}
     >
       <div className="flex flex-col items-center gap-6 sm:gap-8">
-        <div
-          className="relative flex items-center justify-center"
-          style={{ width: ringSize, height: ringSize }}
-        >
-          <div
-            className="animate-glow-pulse pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-            style={{
-              width: glowSize,
-              height: glowSize,
-              background:
-                'radial-gradient(circle, #2F6FED 0%, #3B82F6 40%, transparent 70%)',
-            }}
+        <div style={{ width: logoWidth }}>
+          <SwittixIcon
+            className="w-full h-auto"
+            color={colors.textPrimary}
+            animate={isFull}
+            onComplete={isFull ? onComplete : undefined}
           />
-
-          <div
-            className="absolute inset-0 animate-spin rounded-full"
-            style={{
-              border: '3px solid rgba(59,130,246,0.15)',
-              borderTopColor: '#3B82F6',
-              borderRightColor: '#6FA0FF',
-              animationDuration: '900ms',
-            }}
-          />
-
-          <div
-            className="relative flex items-center justify-center rounded-full bg-[#05070C]"
-            style={{ width: logoSize, height: logoSize }}
-          >
-            <img
-              src={swittixLogo}
-              alt="Swittix Technologies"
-              className="animate-pulse-dot w-full object-contain"
-              style={{ animationDuration: '1600ms' }}
-            />
-          </div>
         </div>
 
         {isFull && (
           <div className="flex flex-col items-center gap-1 sm:gap-2">
-            <span className="text-base sm:text-lg font-bold tracking-[3px] sm:tracking-[4px] text-[#F3F6FB]">
+            <span className="text-base sm:text-lg font-bold tracking-[3px] sm:tracking-[4px]" style={{ color: colors.textPrimary }}>
               SWITTIX
             </span>
-            <span className="text-[10px] sm:text-xs font-semibold tracking-[2px] sm:tracking-[3px] text-[#5B677E]">
+            <span className="text-[10px] sm:text-xs font-semibold tracking-[2px] sm:tracking-[3px]" style={{ color: colors.textMuted }}>
               TECHNOLOGIES
             </span>
           </div>
@@ -66,3 +40,5 @@ export function Loader({ variant = 'full' }) {
     </motion.div>
   );
 }
+
+export default Loader;
