@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatedButton } from './AnimatedButton';
 import { colors } from '../theme';
+import './hero-visual.css';
 
 const LINE1 = 'Building Digital\nSolutions That';
 const LINE2 = 'Move Businesses\nForward.';
@@ -63,11 +64,11 @@ function useTypewriter() {
 
 function MiniStat({ value, label }) {
   return (
-    <div className="flex items-center gap-2 sm:gap-[7px]">
-      <span className="text-sm sm:text-[17px] font-extrabold" style={{ color: colors.textPrimary }}>
+    <div className="flex flex-col items-start gap-0.5 sm:flex-row sm:items-center sm:gap-[7px]">
+      <span className="text-lg sm:text-[17px] font-extrabold leading-none" style={{ color: colors.textPrimary }}>
         {value}
       </span>
-      <span className="text-[10px] sm:text-xs" style={{ color: colors.textMuted }}>{label}</span>
+      <span className="text-[11px] sm:text-xs" style={{ color: colors.textMuted }}>{label}</span>
     </div>
   );
 }
@@ -91,91 +92,172 @@ function FloatingCard({ icon, title, value, className = '' }) {
   );
 }
 
-function HeroVisual() {
-  const [isMobile, setIsMobile] = useState(false);
 
+function HeroVisual() {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(true);
+
+  // Pause every animation while the visual is off-screen (saves battery / CPU on phones).
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 640);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.05 });
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
-  const cardHeight = isMobile ? 280 : 370;
-  const iconSize = isMobile ? 70 : 115;
-
   return (
-    <div className="relative mx-auto w-full max-w-[430px] sm:max-w-full h-[300px] sm:h-[470px]">
-      <div
-        className="absolute left-1/2 top-1/2 h-[200px] w-[200px] sm:h-[350px] sm:w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{
-          background:
-            'radial-gradient(circle, rgba(47,111,237,0.20) 0%, rgba(59,130,246,0.10) 40%, transparent 70%)',
-        }}
-      />
+    <div
+      ref={ref}
+      className={`relative mx-auto w-full max-w-[430px] sm:max-w-full h-[310px] sm:h-[470px] hero-visual${visible ? '' : ' is-paused'}`}
+    >
+      {/* Ambient glow */}
+      <div className="hero-ambient absolute left-1/2 top-1/2 h-[220px] w-[220px] sm:h-[370px] sm:w-[370px] rounded-full" />
 
+      {/* Floating browser window */}
       <div
-        className="absolute left-1/2 top-1/2 w-full max-w-[340px] sm:max-w-[430px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl"
+        className="hero-browser absolute left-1/2 top-1/2 w-full max-w-[340px] sm:max-w-[430px] overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl"
         style={{
           border: `1px solid ${colors.border}`,
           backgroundColor: colors.surface,
         }}
       >
-        <div className="grid-pattern absolute inset-0" />
+        {/* Browser header */}
         <div
-          className="relative flex h-[40px] sm:h-[52px] items-center gap-1.5 px-3 sm:px-[18px] border-b"
-          style={{ borderColor: colors.border, backgroundColor: colors.surfaceAlt }}
+          className="relative z-10 flex h-[40px] sm:h-[52px] items-center gap-1.5 px-3 sm:px-[18px] border-b"
+          style={{
+            borderColor: colors.border,
+            backgroundColor: colors.surfaceAlt,
+          }}
         >
-          <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full" style={{ backgroundColor: colors.error }} />
-          <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full" style={{ backgroundColor: colors.accent }} />
-          <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full" style={{ backgroundColor: colors.primary }} />
+          <span className="h-2 w-2 rounded-full bg-red-500" />
+          <span className="h-2 w-2 rounded-full bg-blue-400" />
+          <span className="h-2 w-2 rounded-full bg-blue-600" />
+
           <div className="flex-1" />
-          <span className="text-[9px] sm:text-[11px] font-semibold" style={{ color: colors.textMuted }}>
+
+          <span
+            className="text-[9px] sm:text-[11px] font-semibold"
+            style={{ color: colors.textMuted }}
+          >
             swittix.com
           </span>
         </div>
 
-        <div className="relative flex items-center justify-center" style={{ height: cardHeight - 40 }}>
-          <div
-            className="flex items-center justify-center rounded-2xl sm:rounded-[28px]"
-            style={{
-              width: iconSize,
-              height: iconSize,
-              background: colors.gradientPrimary,
-              boxShadow: '0 0 35px 2px rgba(47,111,237,0.35)',
-            }}
-          >
-            <svg width={isMobile ? 32 : 48} height={isMobile ? 32 : 48} viewBox="0 0 24 24" fill="none">
-              <path d="M9 17l-5-5 5-5M15 7l5 5-5 5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        {/* Animated technology scene */}
+        <div className="hero-scene relative flex items-center justify-center h-[250px] sm:h-[418px] overflow-hidden">
+          {/* Background grid */}
+          <div className="grid-pattern absolute inset-0 opacity-70" />
+
+          {/* Orbit rings */}
+          <div className="hero-orbit hero-orbit-one" />
+          <div className="hero-orbit hero-orbit-two" />
+          <div className="hero-orbit hero-orbit-three" />
+
+          {/* Orbiting technology nodes */}
+          <div className="hero-node hero-node-one">
+            <span>JS</span>
+          </div>
+
+          <div className="hero-node hero-node-two">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 3L4 7.5V16.5L12 21L20 16.5V7.5L12 3Z"
+                stroke="currentColor"
+                strokeWidth="1.7"
+              />
+              <path
+                d="M8 9.5L12 12L16 9.5M12 12V17"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+              />
             </svg>
           </div>
-        </div>
 
-        <FloatingCard
-          icon={
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path d="M13 2L3 14h7l-1 8 11-14h-7l1-6z" fill="currentColor" />
+          <div className="hero-node hero-node-three">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M7 8L3 12L7 16M17 8L21 12L17 16M14 5L10 19"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
-          }
-          title="Performance"
-          value="98%"
-          className="absolute bottom-3 left-2 sm:bottom-[25px] sm:left-[18px]"
-        />
-        <FloatingCard
-          icon={
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path d="M6 19a4 4 0 010-8 5 5 0 019.9-1H16a3.5 3.5 0 010 7H6z" stroke="currentColor" strokeWidth="1.6" />
-              <path d="M9 15l2 2 4-4" stroke="currentColor" strokeWidth="1.6" />
+          </div>
+
+          <div className="hero-node hero-node-four">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M4 17L9 12L13 15L20 7"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M15 7H20V12"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+              />
             </svg>
-          }
-          title="Cloud Ready"
-          value="100%"
-          className="absolute right-2 top-14 sm:right-[18px] sm:top-[85px]"
-        />
+          </div>
+
+          {/* Central animated core */}
+          <div className="hero-core-wrap relative z-[2] flex items-center justify-center">
+            <div className="hero-core-ring" />
+
+            <div className="hero-core">
+              <svg
+                className="hero-code-icon"
+                width="54"
+                height="54"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M9 17L4 12L9 7M15 7L20 12L15 17"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+
+            <div className="hero-core-dot" />
+          </div>
+
+          {/* Floating information cards */}
+          <div className="hero-info-card hero-info-top">
+            <span className="hero-live-dot" />
+            <div>
+              <p>System Status</p>
+              <strong>All Systems Go</strong>
+            </div>
+          </div>
+
+          <div className="hero-info-card hero-info-bottom">
+            <span className="hero-sparkle">✦</span>
+            <div>
+              <p>Digital Innovation</p>
+              <strong>Ideas → Reality</strong>
+            </div>
+          </div>
+
+          {/* Small ambient particles */}
+          <span className="hero-particle hero-particle-one" />
+          <span className="hero-particle hero-particle-two" />
+          <span className="hero-particle hero-particle-three" />
+          <span className="hero-particle hero-particle-four" />
+        </div>
       </div>
     </div>
   );
 }
+
 
 export function Hero({ onNavigate }) {
   const { line1, line2, description, phase } = useTypewriter();
@@ -200,7 +282,7 @@ export function Hero({ onNavigate }) {
           >
             <span className="animate-pulse-dot h-1.5 w-1.5 sm:h-[7px] sm:w-[7px] rounded-full" style={{ backgroundColor: colors.accent }} />
             <span
-              className="text-[8px] sm:text-[10.5px] font-bold tracking-wider"
+              className="text-[10px] sm:text-[10.5px] font-bold tracking-wide sm:tracking-wider"
               style={{ color: colors.textSecondary }}
             >
               DIGITAL PRODUCT & SOFTWARE STUDIO
@@ -210,13 +292,13 @@ export function Hero({ onNavigate }) {
           <div className="relative mt-4 sm:mt-6" aria-label={LINE1.replace(/\n/g, ' ')}>
             <h1
               aria-hidden="true"
-              className="invisible whitespace-pre-line text-[28px] sm:text-[52px] lg:text-[64px] font-extrabold leading-[1.08] tracking-tight"
+              className="invisible whitespace-pre-line text-[length:clamp(1.75rem,8.4vw,2.25rem)] sm:text-[52px] lg:text-[64px] font-extrabold leading-[1.08] tracking-tight"
             >
               {LINE1}
             </h1>
             <h1
               aria-hidden="true"
-              className="absolute inset-0 whitespace-pre-line text-[28px] sm:text-[52px] lg:text-[64px] font-extrabold leading-[1.08] tracking-tight"
+              className="absolute inset-0 whitespace-pre-line text-[length:clamp(1.75rem,8.4vw,2.25rem)] sm:text-[52px] lg:text-[64px] font-extrabold leading-[1.08] tracking-tight"
               style={{ color: colors.textPrimary }}
             >
               {line1}
@@ -227,13 +309,13 @@ export function Hero({ onNavigate }) {
           <div className="relative" aria-label={LINE2.replace(/\n/g, ' ')}>
             <h1
               aria-hidden="true"
-              className="invisible whitespace-pre-line text-[28px] sm:text-[52px] lg:text-[64px] font-extrabold leading-[1.08] tracking-tight"
+              className="invisible whitespace-pre-line text-[length:clamp(1.75rem,8.4vw,2.25rem)] sm:text-[52px] lg:text-[64px] font-extrabold leading-[1.08] tracking-tight"
             >
               {LINE2}
             </h1>
             <h1
               aria-hidden="true"
-              className="absolute inset-0 whitespace-pre-line text-[28px] sm:text-[52px] lg:text-[64px] font-extrabold leading-[1.08] tracking-tight"
+              className="absolute inset-0 whitespace-pre-line text-[length:clamp(1.75rem,8.4vw,2.25rem)] sm:text-[52px] lg:text-[64px] font-extrabold leading-[1.08] tracking-tight"
               style={{
                 background: colors.gradientText,
                 WebkitBackgroundClip: 'text',
@@ -247,12 +329,12 @@ export function Hero({ onNavigate }) {
           </div>
 
           <div className="relative mt-4 sm:mt-6 max-w-xl" aria-label={DESCRIPTION}>
-            <p aria-hidden="true" className="invisible text-sm sm:text-[16.5px] leading-[1.65]">
+            <p aria-hidden="true" className="invisible text-[15px] sm:text-[16.5px] leading-[1.65]">
               {DESCRIPTION}
             </p>
             <p
               aria-hidden="true"
-              className="absolute inset-0 text-sm sm:text-[16.5px] leading-[1.65]"
+              className="absolute inset-0 text-[15px] sm:text-[16.5px] leading-[1.65]"
               style={{ color: colors.textSecondary }}
             >
               {description}
@@ -260,12 +342,12 @@ export function Hero({ onNavigate }) {
             </p>
           </div>
 
-          <div className="mt-6 sm:mt-8 flex flex-wrap gap-2.5 sm:gap-3.5">
+          <div className="mt-6 sm:mt-8 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-3.5">
             <AnimatedButton
               label="Start a Project"
               primary
               onClick={() => onNavigate('/start-project')}
-              className="text-xs sm:text-sm px-3 sm:px-5 py-2.5 sm:py-3.5"
+              className="w-full sm:w-auto justify-center text-sm px-4 sm:px-5 py-3 sm:py-3.5"
               icon={
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
                   <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -275,7 +357,7 @@ export function Hero({ onNavigate }) {
             <AnimatedButton
               label="Explore Services"
               onClick={() => onNavigate('/services')}
-              className="text-xs sm:text-sm px-3 sm:px-5 py-2.5 sm:py-3.5"
+              className="w-full sm:w-auto justify-center text-sm px-4 sm:px-5 py-3 sm:py-3.5"
               icon={
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
                   <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.8" />
@@ -287,7 +369,7 @@ export function Hero({ onNavigate }) {
             />
           </div>
 
-          <div className="mt-6 sm:mt-9 flex flex-wrap gap-4 sm:gap-7">
+          <div className="mt-7 sm:mt-9 grid grid-cols-3 gap-4 border-t pt-5 sm:flex sm:flex-wrap sm:gap-7 sm:border-t-0 sm:pt-0" style={{ borderColor: colors.border }}>
             <MiniStat value="50+" label="Projects" />
             <MiniStat value="20+" label="Businesses" />
             <MiniStat value="24/7" label="Support" />
