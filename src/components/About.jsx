@@ -3,29 +3,32 @@ import { motion } from 'framer-motion';
 import { PrimaryButton, SecondaryButton } from './AnimatedButton';
 import { HoverCard, useInView } from './Sections';
 import { colors } from '../theme';
-
-import umairImage from '../assets/images/umair.jpeg';
-import aliImage from '../assets/images/ali.jpeg';
-import maryamImage from '../assets/images/maryam.jpeg';
-import sufyanImage from '../assets/images/sufyan.jpeg';
+import { teamMembers } from '../data/teamMembers';
+import { MemberDetailModal } from './MemberDetailModal';
 
 const fadeInUp = { initial: { opacity: 0, y: 40 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.6 } };
 const fadeIn = { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.8 } };
 const staggerChildren = { animate: { transition: { staggerChildren: 0.15 } } };
 
-function TeamCard({ image, alt, name, role, revealDelay = 0 }) {
+function TeamCard({ image, alt, name, role, revealDelay = 0, onClick }) {
   const [hover, setHover] = useState(false);
   const [ref, inView] = useInView();
 
   return (
-    <div
+    <button
       ref={ref}
+      type="button"
+      onClick={onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className="rounded-2xl p-4 sm:p-8 text-center"
+      className="w-full rounded-2xl p-4 text-center sm:p-8"
       style={{
         opacity: inView ? 1 : 0,
-        transform: inView ? (hover ? 'translateY(-6px) scale(1)' : 'translateY(0) scale(1)') : 'translateY(0) scale(0.82)',
+        transform: inView
+          ? hover
+            ? 'translateY(-6px) scale(1)'
+            : 'translateY(0) scale(1)'
+          : 'translateY(0) scale(0.82)',
         transformOrigin: 'center center',
         transitionProperty: 'opacity, transform, border-color, box-shadow',
         transitionDuration: inView && !hover ? '600ms' : '200ms',
@@ -34,10 +37,11 @@ function TeamCard({ image, alt, name, role, revealDelay = 0 }) {
         backgroundColor: colors.surface,
         border: `1px solid ${hover ? colors.primaryBorderSoft : colors.border}`,
         boxShadow: hover ? '0 12px 30px -4px rgba(15,27,45,0.10)' : 'none',
+        cursor: 'pointer',
       }}
     >
       <div
-        className="relative mx-auto mb-4 sm:mb-5 h-24 w-24 sm:h-32 sm:w-32 overflow-hidden rounded-full transition-all duration-300"
+        className="relative mx-auto mb-4 h-24 w-24 overflow-hidden rounded-full transition-all duration-300 sm:mb-5 sm:h-32 sm:w-32"
         style={{ background: hover ? colors.primarySoftHover : colors.primarySoft }}
       >
         <img
@@ -48,16 +52,27 @@ function TeamCard({ image, alt, name, role, revealDelay = 0 }) {
         />
         <div
           className="absolute inset-0 rounded-full ring-2 transition-all duration-300"
-          style={{ borderColor: 'transparent', boxShadow: hover ? `0 0 0 2px ${colors.primaryBorderSoft}` : 'none' }}
+          style={{
+            borderColor: 'transparent',
+            boxShadow: hover ? `0 0 0 2px ${colors.primaryBorderSoft}` : 'none',
+          }}
         />
       </div>
-      <h4 className="text-base sm:text-lg font-semibold" style={{ color: colors.textPrimary }}>{name}</h4>
+      <h4 className="text-base font-semibold sm:text-lg" style={{ color: colors.textPrimary }}>{name}</h4>
       <p className="text-xs sm:text-sm" style={{ color: colors.primary }}>{role}</p>
-    </div>
+      <span
+        className="mt-2 inline-block text-[11px] font-medium transition-opacity duration-200 sm:text-xs"
+        style={{ color: colors.primary, opacity: hover ? 1 : 0.6 }}
+      >
+        View details →
+      </span>
+    </button>
   );
 }
 
 export function About({ onNavigate }) {
+  const [selectedMember, setSelectedMember] = useState(null);
+
   return (
     <div className="relative overflow-hidden">
       <motion.section
@@ -258,20 +273,16 @@ export function About({ onNavigate }) {
             </p>
           </motion.div>
 
-          <div className="mt-8 sm:mt-12 grid gap-4 sm:gap-6 lg:gap-8 grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { name: "Umair Arshad", role: "CEO & Founder", image: umairImage, alt: "Umair Arshad - CEO & Founder" },
-              { name: "Maryam Arshad", role: "Marketing Director", image: maryamImage, alt: "Maryam Arshad - Marketing Director" },
-              { name: "Sufyan Butt", role: "Senior Software Developer", image: sufyanImage, alt: "Sufyan Butt - Senior Software Developer" },
-              { name: "Ali Haider", role: "Junior Software Developer", image: aliImage, alt: "Ali Haider - Junior Software Developer" },
-            ].map((member, index) => (
+          <div className="mt-8 sm:mt-12 grid gap-4 sm:gap-6 lg:gap-8 grid-cols-2 sm:grid-cols-2 lg:grid-cols-5">
+            {teamMembers.map((member, index) => (
               <TeamCard
-                key={member.name}
+                key={member.id}
                 image={member.image}
                 alt={member.alt}
                 name={member.name}
                 role={member.role}
-                revealDelay={(index % 4) * 90}
+                revealDelay={(index % 5) * 90}
+                onClick={() => setSelectedMember(member)}
               />
             ))}
           </div>
@@ -316,6 +327,12 @@ export function About({ onNavigate }) {
           </div>
         </div>
       </motion.section>
+
+      <MemberDetailModal
+        member={selectedMember}
+        onClose={() => setSelectedMember(null)}
+        onNavigate={onNavigate}
+      />
     </div>
   );
 }
